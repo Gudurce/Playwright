@@ -1,29 +1,29 @@
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
 
 browser = None
 page = None
 
-def start_browser():
+async def start_browser():
     global browser, page
-    playwright = sync_playwright().start()
-    browser = playwright.chromium.launch(headless=False)
-    page = browser.new_page()
+    playwright = await async_playwright().start()
+    browser = await playwright.chromium.launch(headless=False)
+    page = await browser.new_page()
 
-
-def close_browser():
+async def close_browser():
     global browser
-    browser.close
+    await browser.close()
 
-def set_page(page_obj):
+async def click(text):
     global page
-    page = page_obj
+    await page.click(f"text={text}")
 
-def click(text):
+async def goto(url):
     global page
+    await page.goto(url)
 
-    page.get_by_text(text).click()
-    # page.get_by_text("Add/Remove Elements").click()
-
-def goto(url):
+async def getTitle():
     global page
-    page.goto(url)
+    print("1")
+    title = await page.title()
+    print("2")
+    return title

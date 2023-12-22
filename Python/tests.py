@@ -1,18 +1,23 @@
+import asyncio
 from wrapper import * 
-webSite = "https://the-internet.herokuapp.com/"
-timeout = 1000
+import pytest
 
-def test_add_remove_elements():
-    with sync_playwright() as p:
-        start_browser()
-        click("Add/Remove Elements")
-        page.wait_for_timeout(timeout)
-        close_browser()
+webSite1 = "https://the-internet.herokuapp.com/"
+webSite2 = "https://example.com"
+timeout = 2
 
-# def test_example_website():
-#     with sync_playwright() as p:
-#         browser = p.chromium.launch(headless=False)
-#         page = browser.new_page()
-#         page.goto("https://example.com")
-#         assert "Example Domain" in page.title()
-#         browser.close()
+@pytest.mark.asyncio
+async def test_add_remove_elements():
+    await start_browser()
+    await goto(webSite1)
+    await click ("Add/Remove Elements")
+    await asyncio.sleep(timeout)
+    await close_browser()
+
+@pytest.mark.asyncio
+async def test_example_website():
+    await start_browser()        
+    await goto(webSite2)
+    title = await getTitle()
+    assert "Example Domain" in title
+    await close_browser()
